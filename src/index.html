@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/styleTable.css"/>
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <header>
+            Header
+        </header>
+        <div id="mainContent">
+            <div>
+                дні
+                <input type="text" id="daysInput" value="30" onchange="changeDay()"/><br>
+                ім'я
+                <input type="text" id="nameInput" value=""/><br>
+                оклад
+                <input type="text" id="okladInput" value="0"/><br>
+                норма
+                <input type="text" id="normaInput" value="0"/><br>
+                факт
+                <input type="text" id="factInput" value=" 0"/><br>
+                індексація
+                <input type="text" id="indexInput" value="0"/><br>
+                Переробіток на початок місяцю
+                <input type="text" id="pererobInput" value="6"/><br>
+                <div id="tableDiv"></div>
+                <input type="button" value="автозаповнення" onclick="autoZap()"/><br>
+                *Потрібно ввести 1 цикл в будь-яке місце!
+                <input type="button" value="розрахунок" onclick="makeRozrahunok()"/><br>
+                <div id="rozrahunokDiv"></div>
+            </div>
+        </div>
+        <footer>
+            Footer
+        </footer>
+
+    </main>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
