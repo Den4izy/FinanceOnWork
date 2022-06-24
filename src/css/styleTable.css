@@ -9,6 +9,7 @@ td,.inputGraf{
 }
 .inputGraf{
     border: none;
+    outline: none;
 }#rozrahunokDiv{
      width: 545px;
      min-height: 150px;

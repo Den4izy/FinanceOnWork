@@ -31,7 +31,6 @@ function getTime(){
     return res;
 
 }
-
 function makeRozrahunok(){
     document.querySelector('#rozrahunokDiv').innerHTML = createText();
     document.querySelector('#rozrahunokDiv').style.backgroundImage = 'url(./img/foneWhite.png)';
@@ -39,7 +38,6 @@ function makeRozrahunok(){
 
 
 }
-
 function createText(){
     let r = new rozrahunok();
     let positiveEnd = '';
@@ -209,9 +207,6 @@ function createText(){
 
     return text
 }
-
-
-
 class rozrahunok{
     text = '';
     time = getTime();
@@ -244,7 +239,6 @@ class rozrahunok{
     // до видачі
     result = this.allMoney - this.allZbor;
 }
-
 function hourDetails(){
     let arr = [];
     let day = 0;
@@ -280,23 +274,61 @@ function hourDetails(){
     return arr;
 
 }
-
-
 function changeDay(){
     elementTable.innerHTML = createTableText();
     elementTableTd = document.querySelectorAll(".grafTd");
+    // let elem = document.querySelector('#daysInput');
+    // if(elem.value == ''){
+    //     elem.value = '30';
+    // }
     addOnClick();
 }
+
+function addEventsInputs(){
+    const elements = document.querySelectorAll('.infoInput');
+    for (const el of elements) {
+        if (el.id == 'daysInput'){
+            console.log('ddd');
+            changeDay();
+        }
+        else{
+            el.addEventListener('change' , e =>{
+                if(e.target.value == ''){
+                    e.target.value = '0';
+                }
+            });
+        }
+
+    }
+    for (const el of elements){
+        el.addEventListener('click',e =>{
+            if(e.target.value == '0'){
+                e.target.value = '';
+            }
+        })
+    }
+    for (const el of elements){
+        el.addEventListener('blur',e =>{
+
+            if(e.target.value == ''){
+                if(e.target.id == 'daysInput'){
+                    console.log('days lose focus');
+                    e.target.value = '30';
+                    changeDay();
+                }
+                else{
+                    e.target.value = '0';
+                    console.log('blur');
+                }
+            }
+        })
+    }
+}
 function addOnClick(){
-
     for(let i = 0; i < elementTableTd.length; i++){
-
-
         elementTableTd[i].onclick = function(event){
-
             event.target.innerHTML = '<input type="text" class="inputGraf" />';
             event.target.onblur = function (event){
-
                 elementTableTd[i].innerHTML = event.target.value;
             };
         };
@@ -396,5 +428,5 @@ function createTableText(){
     result +='</tr></table>';
     return result;
 }
-
+addEventsInputs();
 addOnClick();

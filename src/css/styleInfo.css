@@ -1,0 +1,21 @@
+#info{
+    margin: 5px;
+    font-size: 14pt;
+}
+.labelInfo{
+    width: 140px;
+}
+.infoStroka{
+    width: 257px;
+    display: flex;
+    margin: 5px;
+    border-bottom: 1px solid black;
+
+}
+.infoInput{
+    border: none;
+    outline: none;
+    width: 100px;
+    font-size: 14pt;
+    font-style: italic;
+}s
