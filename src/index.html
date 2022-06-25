@@ -1,15 +1,17 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="stylesheet" href="css/styleInfo.css"/>
-    <link rel="stylesheet" href="css/styleTable.css"/>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/styleInfo.css" />
+    <link rel="stylesheet" href="css/styleTable.css" />
     <title>Document</title>
 </head>
+
 <body>
     <main>
         <header>
@@ -20,38 +22,42 @@
                 <div id="info">
                     <div class="infoStroka">
                         <div class="labelInfo">кількість днів</div>
-                        <input type="text" id="daysInput" class="infoInput" value="30" onchange="changeDay()"/><br>
+                        <input type="text" id="daysInput" class="infoInput" value="30" onchange="changeDay()" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo">ім'я</div>
-                        <input type="text" id="nameInput" class="infoInput" value=""/><br>
+                        <input type="text" id="nameInput" class="infoInput" value="" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo">оклад</div>
-                        <input type="text" id="okladInput" class="infoInput" value="0"/><br>
+                        <input type="text" id="okladInput" class="infoInput" value="0" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo">норма</div>
-                        <input type="text" id="normaInput" class="infoInput" value="0"/><br>
+                        <input type="text" id="normaInput" class="infoInput" value="0" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo">факт</div>
-                        <input type="text" id="factInput" class="infoInput" value="0"/><br>
+                        <input type="text" id="factInput" class="infoInput" value="0" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo">індексація</div>
-                        <input type="text" id="indexInput" class="infoInput" value="0"/><br>
+                        <input type="text" id="indexInput" class="infoInput" value="0" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo">Переробіток на початок місяцю</div>
-                        <input type="text" id="pererobInput" class="infoInput" value="0"/><br>
+                        <input type="text" id="pererobInput" class="infoInput" value="0" /><br>
                     </div>
                 </div>
 
                 <div id="tableDiv"></div>
-                <input type="button" value="автозаповнення" onclick="autoZap()"/><br>
-                *Потрібно ввести 1 цикл в будь-яке місце!
-                <input type="button" value="розрахунок" onclick="makeRozrahunok()"/><br>
+                <div id="autozapDiv">
+                    <input type="button" value="автозаповнення" onclick="autoZap()" />*Потрібно ввести 1 цикл в будь-яке
+                    місце!
+                </div>
+                <div id="butRozId">
+                    <input id="butRoz" type="button" value="розрахунок" onclick="makeRozrahunok()" />
+                </div>
                 <div id="rozrahunokDiv"></div>
             </div>
         </div>
@@ -62,4 +68,5 @@
     </main>
     <script src="scripts/script.js"></script>
 </body>
+
 </html>

@@ -1,21 +1,25 @@
 #table{
     border-collapse: collapse;
+    margin: 10px;
 }
 td,.inputGraf{
     border: 1px solid black;
     width: 30px;
     height: 20px;
     text-align: center;
+    font-size: 16pt;
+    margin: 0;
 }
 .inputGraf{
     border: none;
     outline: none;
 }#rozrahunokDiv{
-     width: 545px;
-     min-height: 150px;
-     padding: 51px 31px 103px 55px;
-     font-family: Courier, monospace;
-     background-size: cover;
+    width: 545px;
+    min-height: 150px;
+    padding: 51px 31px 103px 55px;
+    font-family: Courier, monospace;
+    background-size: cover;
+    margin: auto;
 }
 .flex{
  display: flex;
