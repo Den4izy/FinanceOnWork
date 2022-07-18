@@ -2,6 +2,42 @@ let elementTable = document.querySelector("#tableDiv");
 elementTable.innerHTML = createTableText();
 let elementTableTd = document.querySelectorAll(".grafTd");
 let elementRozrahunok = document.querySelector('#rozrahunokDiv');
+let elemLang = document.querySelector('#lang'); 
+
+class rozrahunok{
+    text = '';
+    time = getTime();
+    hourArrDetails = hourDetails();
+    name = document.querySelector('#nameInput').value;
+    oklad = document.querySelector('#okladInput').value;
+    norma = document.querySelector('#normaInput').value * 1;
+    //fact = document.querySelector('#factInput').value * 1;
+    hourStartMonth = document.querySelector('#pererobInput').value * 1;
+    index = document.querySelector('#indexInput').value * 1;
+    // Кількість годин
+    day = this.hourArrDetails[0];
+    evening = this.hourArrDetails[1];
+    night = this.hourArrDetails[2];
+    all = this.day + this.evening + this.night;
+    fact = this.all;
+    hourEndMonth = this.fact + this.hourStartMonth - this.norma;
+    // Кошти за годину( вечірні та нічні це надбавка до денних годин!!)
+    moneyPerDayHour = this.oklad / this.norma;
+    moneyPlusPerEvenHour = this.moneyPerDayHour * 1.2 - this.moneyPerDayHour;
+    moneyPlusPerNightHour = this.moneyPerDayHour * 1.4 - this.moneyPerDayHour;
+    // Нараховані кошти
+    moneyDay = this.norma * this.moneyPerDayHour;
+    moneyEvening = Math.round(this.evening * this.moneyPlusPerEvenHour);
+    moneyNight = Math.round(this.night * this.moneyPlusPerNightHour);
+    allMoney = Math.round(this.moneyDay + this.moneyEvening + this.moneyNight + this.index);
+    // Утримані кошти
+    fop = Math.round(this.allMoney * 1.18 - this.allMoney) * 1;
+    profcom = Math.round(this.allMoney * 1.01 - this.allMoney) * 1;
+    military = Math.round(this.allMoney * 1.015 - this.allMoney) * 1;
+    allZbor = this.fop + this.profcom + this.military;
+    // до видачі
+    result = this.allMoney - this.allZbor;
+}
 
 function getTime(){
     let res = '';
@@ -41,6 +77,7 @@ function makeRozrahunok(){
 function createText(){
     let r = new rozrahunok();
     let positiveEnd = '';
+    document.querySelector('#factInput').value = r.fact
     if (r.hourEndMonth > 0){
         positiveEnd = '+';
     }
@@ -83,7 +120,7 @@ function createText(){
                     '<div>|</div>' + '<div>відпрацьваний час</div>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
-                    '<div>|</div>'+'<div class="alignRight">' + positiveEnd +  r.hourEndMonth + '' + '</div>' +
+                    '<div>|</div>'+'<div class="alignRight">' + positiveEnd +  r.fact + '' + '</div>' +
                 '</div>' +
                 '<div class="three flexBetween">' +
                     '<div>г</div>' +'<div class="alignRight">|</div>' +
@@ -207,38 +244,6 @@ function createText(){
 
     return text
 }
-class rozrahunok{
-    text = '';
-    time = getTime();
-    hourArrDetails = hourDetails();
-    name = document.querySelector('#nameInput').value;
-    oklad = document.querySelector('#okladInput').value;
-    norma = document.querySelector('#normaInput').value * 1;
-    fact = document.querySelector('#factInput').value * 1;
-    hourStartMonth = document.querySelector('#pererobInput').value * 1;
-    index = document.querySelector('#indexInput').value * 1;
-    hourEndMonth = this.fact + this. hourStartMonth - this.norma;
-    // Кількість годин
-    day = this.hourArrDetails[0];
-    evening = this.hourArrDetails[1];
-    night = this.hourArrDetails[2];
-    // Кошти за годину( вечірні та нічні це надбавка до денних годин!!)
-    moneyPerDayHour = this.oklad / this.norma;
-    moneyPlusPerEvenHour = this.moneyPerDayHour * 1.2 - this.moneyPerDayHour;
-    moneyPlusPerNightHour = this.moneyPerDayHour * 1.4 - this.moneyPerDayHour;
-    // Нараховані кошти
-    moneyDay = this.norma * this.moneyPerDayHour;
-    moneyEvening = Math.round(this.evening * this.moneyPlusPerEvenHour);
-    moneyNight = Math.round(this.night * this.moneyPlusPerNightHour);
-    allMoney = Math.round(this.moneyDay + this.moneyEvening + this.moneyNight + this.index);
-    // Утримані кошти
-    fop = Math.round(this.allMoney * 1.18 - this.allMoney) * 1;
-    profcom = Math.round(this.allMoney * 1.01 - this.allMoney) * 1;
-    military = Math.round(this.allMoney * 1.015 - this.allMoney) * 1;
-    allZbor = this.fop + this.profcom + this.military;
-    // до видачі
-    result = this.allMoney - this.allZbor;
-}
 function hourDetails(){
     let arr = [];
     let day = 0;
@@ -283,7 +288,6 @@ function changeDay(){
     // }
     addOnClick();
 }
-
 function addEventsInputs(){
     const elements = document.querySelectorAll('.infoInput');
     for (const el of elements) {
@@ -428,5 +432,24 @@ function createTableText(){
     result +='</tr></table>';
     return result;
 }
+
+function lang(){
+    elemLang.addEventListener('change', testfunk);
+
+}
+function testfunk(){
+    let lang = elemLang.value;
+    console.log(lang);
+    for(let key in langArr){
+        console.log(langArr[key][lang]);
+        console.log(key);
+        console.log( document.querySelector('.' + key));
+        console.log('------');
+        document.querySelector('.' + key).innerHTML = langArr[key][lang];
+    }
+}
+
 addEventsInputs();
 addOnClick();
+lang();
+
