@@ -24,9 +24,29 @@
                     <option value="en">Eng</option>
                 </select>
                 <div id="info">
-                    <div class="infoStroka">
-                        <div class="labelInfo days-lang">кількість днів</div>
-                        <input type="text" id="daysInput" class="infoInput" value="30" onchange="changeDay()" /><br>
+                    <div class="infoStroka" onchange="changeDay()">
+                        <div class="labelInfo mounth-lang">
+                            місяць
+                        </div>
+<!--                    <input type="text" id="daysInput" class="infoInput" value="30" onchange="changeDay()" /><br>-->
+                        <select id="month">
+                            <option value="1">Січень</option>
+                            <option value="2">Лютий</option>
+                            <option value="3">Березень</option>
+                            <option value="4">Квітень</option>
+                            <option value="5">Травень</option>
+                            <option value="6">Червень</option>
+                            <option value="7">Липень</option>
+                            <option value="8">Серпень</option>
+                            <option value="9">Вересень</option>
+                            <option value="10">Жовтень</option>
+                            <option value="11">Листопад</option>
+                            <option value="12">Грудень</option>
+                        </select>
+                        <div class="labelInfo year-lang">
+                            рік
+                        </div>
+                        <input type="text" id="year" class="infoInput" value="2022" /><br>
                     </div>
                     <div class="infoStroka">
                         <div class="labelInfo name-lang">ім'я</div>
@@ -57,15 +77,18 @@
 
                 <div id="tableDiv"></div>
                 <div id="autozapDiv">
-                    <input type="button" value="автозаповнення" onclick="autoZap()" />*Потрібно ввести 1 цикл в будь-яке
-                    місце!
+                    <input type="button" class="autozapBut-lang" value="автозаповнення" onclick="autoZap()" />
+                    <span class="span-lang">
+                        *Потрібно ввести 1 цикл в будь-яке місце!
+                    </span>
+
                 </div>
                 <div class="infoStroka">
-                    <div class="labelInfo">факт</div>
+                    <div class="labelInfo fact-lang">факт</div>
                     <input type="text" id="factInput" class="infoInput" disabled value="0" /><br>
                 </div>
                 <div id="butRozId">
-                    <input id="butRoz" type="button" value="розрахунок" onclick="makeRozrahunok()" />
+                    <input id="butRoz" class="rozrahunokBut-lang" type="button" value="розрахунок" onclick="makeRozrahunok()" />
                 </div>
                 <div id="rozrahunokDiv"></div>
             </div>

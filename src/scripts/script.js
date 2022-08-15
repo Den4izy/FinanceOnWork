@@ -1,8 +1,13 @@
 let elementTable = document.querySelector("#tableDiv");
 elementTable.innerHTML = createTableText();
 let elementTableTd = document.querySelectorAll(".grafTd");
+let elementTableTdDaysOfWeek = document.querySelectorAll(".grafDaysOfWeek");
+
+
 let elementRozrahunok = document.querySelector('#rozrahunokDiv');
-let elemLang = document.querySelector('#lang'); 
+let elemLang = document.querySelector('#lang');
+
+let r;
 
 class rozrahunok{
     text = '';
@@ -10,7 +15,13 @@ class rozrahunok{
     hourArrDetails = hourDetails();
     name = document.querySelector('#nameInput').value;
     oklad = document.querySelector('#okladInput').value;
+    //днів відпустки
+    vidpustkaDays = this.hourArrDetails[3];
     norma = document.querySelector('#normaInput').value * 1;
+    //норма фактична(якщо відпустка)
+    normaFact = document.querySelector('#normaInput').value * 1 - this.vidpustkaDays * 8;
+    okladFact = this.oklad / this.norma * this.normaFact
+
     //fact = document.querySelector('#factInput').value * 1;
     hourStartMonth = document.querySelector('#pererobInput').value * 1;
     index = document.querySelector('#indexInput').value * 1;
@@ -22,11 +33,11 @@ class rozrahunok{
     fact = this.all;
     hourEndMonth = this.fact + this.hourStartMonth - this.norma;
     // Кошти за годину( вечірні та нічні це надбавка до денних годин!!)
-    moneyPerDayHour = this.oklad / this.norma;
+    moneyPerDayHour = this.okladFact / this.normaFact;
     moneyPlusPerEvenHour = this.moneyPerDayHour * 1.2 - this.moneyPerDayHour;
     moneyPlusPerNightHour = this.moneyPerDayHour * 1.4 - this.moneyPerDayHour;
     // Нараховані кошти
-    moneyDay = this.norma * this.moneyPerDayHour;
+    moneyDay = this.normaFact * this.moneyPerDayHour;
     moneyEvening = Math.round(this.evening * this.moneyPlusPerEvenHour);
     moneyNight = Math.round(this.night * this.moneyPlusPerNightHour);
     allMoney = Math.round(this.moneyDay + this.moneyEvening + this.moneyNight + this.index);
@@ -39,41 +50,10 @@ class rozrahunok{
     result = this.allMoney - this.allZbor;
 }
 
-class rozrahunok{
-    text = '';
-    time = getTime();
-    hourArrDetails = hourDetails();
-    name = document.querySelector('#nameInput').value;
-    oklad = document.querySelector('#okladInput').value;
-    norma = document.querySelector('#normaInput').value * 1;
-    fact = document.querySelector('#factInput').value * 1;
-    hourStartMonth = document.querySelector('#pererobInput').value * 1;
-    index = document.querySelector('#indexInput').value * 1;
-    hourEndMonth = this.fact + this. hourStartMonth - this.norma;
-    // Кількість годин
-    day = this.hourArrDetails[0];
-    evening = this.hourArrDetails[1];
-    night = this.hourArrDetails[2];
-    // Кошти за годину( вечірні та нічні це надбавка до денних годин!!)
-    moneyPerDayHour = this.oklad / this.norma;
-    moneyPlusPerEvenHour = this.moneyPerDayHour * 1.2 - this.moneyPerDayHour;
-    moneyPlusPerNightHour = this.moneyPerDayHour * 1.4 - this.moneyPerDayHour;
-    // Нараховані кошти
-    moneyDay = this.norma * this.moneyPerDayHour;
-    moneyEvening = Math.round(this.evening * this.moneyPlusPerEvenHour);
-    moneyNight = Math.round(this.night * this.moneyPlusPerNightHour);
-    allMoney = Math.round(this.moneyDay + this.moneyEvening + this.moneyNight + this.index);
-    // Утримані кошти
-    fop = Math.round(this.allMoney * 1.18 - this.allMoney) * 1;
-    profcom = Math.round(this.allMoney * 1.01 - this.allMoney) * 1;
-    military = Math.round(this.allMoney * 1.015 - this.allMoney) * 1;
-    allZbor = this.fop + this.profcom + this.military;
-    // до видачі
-    result = this.allMoney - this.allZbor;
-}
+
 
 function getTime(){
-    let res = '';
+    let res = [];
     let d = new Date();
     let year = d.getFullYear();
     let month = d.getMonth() + 1;
@@ -96,94 +76,98 @@ function getTime(){
     if(sec < 10){
         sec = '0' + sec;
     }
-    res += date + '.' + month + '.' + year + ' p. ' + hour + ':' + min + ':' + sec;
+    res[0] = date + '.' + month + '.' + year;
+    res[1] = hour + ':' + min + ':' + sec;
     return res;
 
 }
 function makeRozrahunok(){
     document.querySelector('#rozrahunokDiv').innerHTML = createText();
     document.querySelector('#rozrahunokDiv').style.backgroundImage = 'url(./img/foneWhite.png)';
+    changeLanguage();
 
 
 
 }
 function createText(){
-    let r = new rozrahunok();
+    r = new rozrahunok();
     let positiveEnd = '';
     document.querySelector('#factInput').value = r.fact
     if (r.hourEndMonth > 0){
         positiveEnd = '+';
     }
     let text = '';
-    text += '<div>' +
+    text += '<div xmlns="http://www.w3.org/1999/html">' +
                 '<div>' +
-                    'Дата створення: ' + r.time +
+                    '<span class="data-lang">Дата створення: </span>' + r.time[0] +
+                        '<span class="year-lang"> р. </span>' + r.time[1] +
                 '</div>' +
                 '<div>' +
                     r.name +
                 '</div>' +
                 '<div>' +
-                    'Оклад: ' + r.oklad + ' грн.' +
+                    '<span class="oklad-lang2">Оклад: </span> ' +  r.oklad + '<span class="grn-lang">грн.</span>' +
                 '</div>' +
             '</div>' +
             '<div class="flex">' +
                 '<div class="first">' +
-                    '+-План ' + r.norma + 'г' + ' Факт ' + r.fact + 'г--------------' +
+                    '+-<span class="plan-lang">План </span> ' + r.norma + '<span class="hour-lang">г</span> ' + '<span class="fact-lang2">Факт</span> ' +
+                    r.normaFact + '<span class="hour-lang">г</span>--------------' +
                 '</div>' +
                 '<div class="two">' +
-                    '+---Час' +
+                    '<span class="time-lang">+---Час</span>' +
                 '</div>' +
                 '<div class="three">' +
-                    '+------Сума+' +
+                    '<span class="sum-lang">+------Сума</span>+' +
                 '</div>' +
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                     '|ПО ОКЛАДУ' +
+                     '|<span class="poOkladu-lang">+ПО ОКЛАДУ</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
-                      '<div> |</div>' +'<div class="alignRight">' + r.norma + '' + '</div>' +
+                      '<div> |</div>' +'<div class="alignRight">' + r.normaFact + '' + '</div>' +
                 '</div>' +
                 '<div class="three flexBetween">' +
-                    '<div>г</div>' +'<div class="alignRight">' + r.oklad + '|' + '</div>' +
+                    '<div class="hour-lang">г</div>' +'<div class="alignRight">' + Math.round(r.okladFact) + '|' + '</div>' +
                 '</div>' +
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first flexBetween">' +
-                    '<div>|</div>' + '<div>відпрацьваний час</div>' +
+                    '<div>|</div>' + '<div class="vidprTime-lang">відпрацьваний час</div>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
-                    '<div>|</div>'+'<div class="alignRight">' + positiveEnd +  r.fact + '' + '</div>' +
+                    '<div>|</div>'+'<div class="alignRight">' + positiveEnd +  (r.fact - r.normaFact) + '' + '</div>' +
                 '</div>' +
                 '<div class="three flexBetween">' +
-                    '<div>г</div>' +'<div class="alignRight">|</div>' +
+                    '<div class="hour-lang">г</div>' +'<div class="alignRight">|</div>' +
                 '</div>' +
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|ОПЛАТА нічного часу' +
+                    '|<span class="oplataNight-lang">ОПЛАТА нічного часу</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div class="alignRight">' + r.night + '' + '</div>' +
                 '</div>' +
                 '<div class="three flexBetween">' +
-                    '<div>г</div>' +'<div class="alignRight">' + r.moneyNight + '|' + '</div>' +
+                    '<div class="hour-lang">г</div>' +'<div class="alignRight">' + r.moneyNight + '|' + '</div>' +
                 '</div>' +
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|ОПЛАТА вечірнього часу' +
+                    '|<span class="oplataEven-lang">ОПЛАТА вечірнього часу</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div class="alignRight">' + r.evening + '' + '</div>' +
                 '</div>' +
                 '<div class="three flexBetween">' +
-                    '<div>г</div>' +'<div class="alignRight">' + r.moneyEvening + '|' + '</div>' +
+                    '<div class="hour-lang">г</div>' +'<div class="alignRight">' + r.moneyEvening + '|' + '</div>' +
                 '</div>' +
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|ІНДЕКСАЦІЯ заробітньої плати' +
+                    '|<span class="indexZarob-lang">ІНДЕКСАЦІЯ заробітньої плати</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div></div>' +
@@ -194,19 +178,19 @@ function createText(){
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first flexBetween">' +
-                    '<div>|</div>' + '<div>ВСЬОГО НАРАХОВАНО:</div>' +
+                    '<div>|</div>' + '<div class="allNarah-lang">ВСЬОГО НАРАХОВАНО:</div>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
-                    '<div>|</div>'+'<div class="alignRight">' + positiveEnd +  r.hourEndMonth + '' + '</div>' +
+                    '<div>|</div>'+'<div class="alignRight">' + positiveEnd + (r.fact - r.normaFact) + '' + '</div>' +
                 '</div>' +
                 '<div class="three flexBetween">' +
-                    '<div>г</div>' +'<div class="alignRight">' + r.allMoney + '|' + '</div>' +
+                    '<div class="hour-lang">г</div>' +'<div class="alignRight">' + r.allMoney + '|' + '</div>' +
                 '</div>' +
             '</div>' +
             '<div>+----------------------------------+------+----------+</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|Податок з доходів фізичних Осіб' +
+                    '|<span class="podatokFiz-lang">Податок з доходів фізичних Осіб</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div></div>' +
@@ -217,7 +201,7 @@ function createText(){
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|Оподаткована сума ' + r.allMoney +
+                    '|<span class="opodakSum-lang">Оподаткована сума</span> ' + r.allMoney +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div></div>' +
@@ -228,7 +212,7 @@ function createText(){
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|Профспілковий внесок 1%' +
+                    '|<span class="profkom-lang">Профспілковий внесок 1%</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div></div>' +
@@ -239,7 +223,7 @@ function createText(){
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first">' +
-                    '|Військовий збір' +
+                    '|<span class="militar-lang">Військовий збір</span>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div></div>' +
@@ -250,7 +234,7 @@ function createText(){
             '</div>' +
             '<div class="flex ">' +
                 '<div class="first flexBetween">' +
-                    '<div>|</div>' + '<div>ВСЬОГО УТРИМАНО:</div>' +
+                    '<div>|</div>' + '<div class="allUtr-lang">ВСЬОГО УТРИМАНО:</div>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div>|</div>' +'<div></div>' +
@@ -262,7 +246,7 @@ function createText(){
             '<div>+----------------------------------+------+----------+</div>' +
             '<div class="flex ">' +
                 '<div class="first flexBetween">' +
-                    '<div>|</div>' + '<div>ДО ВИДАЧІ (мпк-банкомат) :</div>' +
+                    '<div>|</div>' + '<div class="doVidachi-lang">ДО ВИДАЧІ (мпк-банкомат) :</div>' +
                 '</div>' +
                 '<div class="two flexBetween">' +
                     '<div></div>' +'<div></div>' +
@@ -282,6 +266,8 @@ function hourDetails(){
     let day = 0;
     let nigh = 0;
     let evening = 0;
+    let vidpustkaAll = 0;
+    let vidpustkaMinus = 0;
     for(let i = 0; i < elementTableTd.length; i++){
         if(elementTableTd[i].innerHTML == '12'){
             day += 10;
@@ -300,6 +286,14 @@ function hourDetails(){
             day += 2;
             nigh += 6;
         }
+        else if(elementTableTd[i].innerHTML == 'В'){
+            if(elementTableTdDaysOfWeek[i].innerHTML == 'СБ' | elementTableTdDaysOfWeek[i].innerHTML == 'НД'){
+
+            }
+            else{
+                vidpustkaAll += 1;
+            }
+        }
         else{
             day += 0
             nigh += 0;
@@ -309,16 +303,13 @@ function hourDetails(){
     arr[0] = day;
     arr[1] = evening;
     arr[2] = nigh;
+    arr[3] = vidpustkaAll;
+    console.log(arr[3]);
     return arr;
-
 }
 function changeDay(){
     elementTable.innerHTML = createTableText();
     elementTableTd = document.querySelectorAll(".grafTd");
-    // let elem = document.querySelector('#daysInput');
-    // if(elem.value == ''){
-    //     elem.value = '30';
-    // }
     addOnClick();
 }
 function addEventsInputs(){
@@ -366,9 +357,27 @@ function addOnClick(){
         elementTableTd[i].onclick = function(event){
             event.target.innerHTML = '<input type="text" class="inputGraf" />';
             event.target.onblur = function (event){
+                console.log('onBlur');
                 elementTableTd[i].innerHTML = event.target.value;
+                console.log(elementTableTd[i].innerHTML);
+                if(elementTableTd[i].innerHTML == 'В'){
+                    console.log('fffffffffffffffffffff');
+                    elementTableTd[i].classList.add('backGroundGreen');
+                }
+                else{
+                    elementTableTd[i].classList.remove('backGroundGreen');
+                }
             };
         };
+        elementTableTd[i].onchange = function (event){
+            if(event.target.innerHTML == 'В'){
+                console.log('fffffffffffffffffffff');
+                event.target.classList.add('backGroundGreen');
+            }
+            else{
+                event.target.classList.remove('backGroundGreen');
+            }
+        }
     }
 }
 function autoZap(){
@@ -448,37 +457,52 @@ function cicleLeft(start){
 
 }
 function createTableText(){
-    let elementDays = document.querySelector('#daysInput');
-    let days = Number(elementDays.value);
-    console.log(days);
+    let year = Number(document.querySelector("#year").value);
+    let month = Number(document.querySelector("#month").value);
+    let days = new Date(year, month, 0).getDate();
     let result = '';
-    result += '<table id="table">' +
-                '<tr>';
+    result += '<table id="table">' + '<tr>';
     for(let i = 0; i < days; i++){
         let count = i + 1;
+        let daysArr = ['НД', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+        let clas = '';
+        let day = daysArr[new Date(year,month-1, count).getDay()];
+        if(day == 'СБ' | day == 'НД'){
+            clas = 'backGroundYellow';
+        }
+        result += '<td class="grafDaysOfWeek ' + clas + '">' + day + '</td>';
+    }
+    result += '</tr><tr>';
+    for(let i = 0; i < days; i++){
+        let count = i + 1;
+        let daysArr = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+        console.log(daysArr[new Date(year,month-1, count).getDay()]);
         result += '<td>' + count + '</td>';
     }
     result += '</tr><tr>';
-        for(let i = 0; i < days; i++){
-            result += '<td class="grafTd"></td>';
-        }
+    for(let i = 0; i < days; i++){
+        result += '<td class="grafTd"></td>';
+    }
     result +='</tr></table>';
     return result;
 }
-
 function lang(){
-    elemLang.addEventListener('change', testfunk);
-
+    elemLang.addEventListener('change', changeLanguage);
 }
-function testfunk(){
+function changeLanguage(){
     let lang = elemLang.value;
-    console.log(lang);
     for(let key in langArr){
-        console.log(langArr[key][lang]);
-        console.log(key);
-        console.log( document.querySelector('.' + key));
-        console.log('------');
-        document.querySelector('.' + key).innerHTML = langArr[key][lang];
+        let doc = document.querySelectorAll('.' + key);
+        if(doc){
+            for(let docI of doc){
+                if(docI.type == 'button'){
+                    docI.value = langArr[key][lang];
+                }
+                else{
+                    docI.innerHTML = langArr[key][lang];
+                }
+            }
+        }
     }
 }
 

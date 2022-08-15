@@ -28,9 +28,15 @@
 #butRoz{
     font-size: 20pt;
 }
-#lang{
+#lang, #month{
     width: 100px;
     height: 30px;
     border: 1px solid black;
     float: right;
+}
+.backGroundYellow{
+    background-color: yellow;
+}
+.backGroundGreen{
+    background-color: greenyellow;
 }
